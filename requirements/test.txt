@@ -1,0 +1,5 @@
+-r base.txt
+flake8<3.6
+isort<4.4
+pep8-naming<0.8
+mixer<6.1

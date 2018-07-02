@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from . import views
 
+from banking.accounts.api_v1.views import BankAccountView
 
 urlpatterns = [
-    url(r'^test/$', views.TestView.as_view(), name='test'),
+    url(r'^accounts/$', BankAccountView.as_view(), name='accounts'),
 ]

@@ -1,7 +1,23 @@
 
 
-class Notificacion(object):
+class Error(Exception):
+
+    def __init__(self, message=None, cause=None):
+        self.message = message
+        self.cause = cause
+
+    def get_message(self):
+        return self.message
+
+
+class Notification:
     errors = []
 
-    def add_error(self, error):
-        self.errors.append(error)
+    def add_error(self, message, exception=None):
+        self.errors.append(Error(message, exception))
+
+    def has_error(self):
+        return True if self.errors else False
+
+    def error_message(self):
+        return ", ".join([error.get_message() for error in self.errors])

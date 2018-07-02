@@ -1,24 +1,19 @@
 from django.db import models
 
-from banking.customers.models import Customer
+from banking.customers.models import ORMCustomer
 
 
-class BankAccount(models.Model):
+class ORMBankAccount(models.Model):
     number = models.CharField(max_length=20)
-    balance = models.DecimalField(decimal_places=2)
-    is_locked = models.BooleanField()
-    customer = models.ForeignKey(Customer)
+    balance = models.DecimalField(decimal_places=2, max_digits=14, blank=True, null=True)
+    is_locked = models.BooleanField(default=False)
+    customer = models.ForeignKey(ORMCustomer)
 
-    def lock(self):
-        if not self.is_locked:
-            self.is_locked = True
+    class Meta:
+        db_table = 'bank_account'
+        verbose_name = 'Bank account'
+        verbose_name_plural = 'Bank accounts'
 
-    def unlock(self):
-        if self.is_locked:
-            self.is_locked = False
+    def __str__(self):
+        return '{}: {}'.format(self.customer, self.number)
 
-    def has_identity(self):
-        return True if self.number.strip() else False
-
-    def withdraw_money(self, amount):
-        pass

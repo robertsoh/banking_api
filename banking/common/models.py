@@ -1,6 +1,5 @@
 
 
-
 class Notificacion(object):
     errors = []
 

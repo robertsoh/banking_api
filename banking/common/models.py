@@ -21,3 +21,9 @@ class Notification:
 
     def error_message(self):
         return ", ".join([error.get_message() for error in self.errors])
+
+
+class EntityDoesNotExistException(Error):
+
+    def __init__(self, message='Entity not found'):
+        super().__init__(message)

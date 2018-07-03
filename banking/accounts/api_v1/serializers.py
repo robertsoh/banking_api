@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from banking.accounts.factories import create_bank_account_interactor
+from banking.accounts.factories import create_bank_account_interactor, create_bank_account_repository
+from banking.common.models import EntityDoesNotExistException
+from banking.customers.factories import create_customer_repository
 
 
 class BankAccountSerialize(serializers.Serializer):
@@ -11,6 +13,8 @@ class BankAccountSerialize(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.create_bank_account_interactor = create_bank_account_interactor()
+        self.customer_repository = create_customer_repository()
+        self.bank_account_repository = create_bank_account_repository()
 
     @staticmethod
     def to_dict(account):
@@ -23,8 +27,15 @@ class BankAccountSerialize(serializers.Serializer):
         }
 
     def validate_customer_id(self, value):
-        if value > 10:
-            raise serializers.ValidationError('Does not exist')
+        try:
+            self.customer_repository.get_customer_by_id(value)
+            return value
+        except EntityDoesNotExistException as ex:
+            raise serializers.ValidationError(ex.get_message())
+
+    def validate_number(self, value):
+        if self.bank_account_repository.exists_account_number(value):
+            raise serializers.ValidationError('Account number already exists')
         return value
 
     def create(self, validated_data):

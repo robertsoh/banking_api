@@ -48,4 +48,4 @@ class BankAccountSerialize(serializers.Serializer):
         return self.to_dict(account)
 
     def update(self, instance, validated_data):
-        pass
+        super(BankAccountSerialize, self).update()

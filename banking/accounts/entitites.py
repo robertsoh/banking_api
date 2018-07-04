@@ -9,7 +9,7 @@ class BankAccount(object):
         self.is_locked = is_locked
         self.customer_id = customer_id
         self.id = id
-    
+
     def lock(self):
         if not self.is_locked:
             self.is_locked = True
@@ -23,15 +23,27 @@ class BankAccount(object):
 
     def withdraw_money(self, amount):
         notification = self.withdraw_validation(amount)
-        if notification.has_error():
+        if notification.has_errors():
             raise ValueError(notification.error_message())
-        self.balance = self.balance - amount
+        self.balance -= amount
+
+    def deposit_money(self, amount):
+        notification = self.deposit_validation(amount)
+        if notification.has_errors():
+            raise ValueError(notification.error_message())
+        self.balance += amount
 
     def withdraw_validation(self, amount):
         notification = Notification()
         self.validate_amount(notification, amount)
         self.validate_bank_account(notification)
         self.validate_balance(notification, amount)
+        return notification
+
+    def deposit_validation(self, amount):
+        notification = Notification()
+        self.validate_amount(notification, amount)
+        self.validate_bank_account(notification)
         return notification
 
     def validate_amount(self, notification, amount):

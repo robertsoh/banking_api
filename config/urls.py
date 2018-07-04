@@ -5,4 +5,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/v1/', include('banking.customers.api_v1.urls', namespace='api_customers')),
     url(r'^api/v1/', include('banking.accounts.api_v1.urls', namespace='api_accounts')),
+    url(r'^api/v1/', include('banking.transactions.api_v1.urls', namespace='api_transactions')),
 ]

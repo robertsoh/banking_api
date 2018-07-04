@@ -16,7 +16,7 @@ class Notification:
     def add_error(self, message, exception=None):
         self.errors.append(Error(message, exception))
 
-    def has_error(self):
+    def has_errors(self):
         return True if self.errors else False
 
     def error_message(self):

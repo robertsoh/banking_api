@@ -8,7 +8,7 @@ class BankAccountSerialize(serializers.Serializer):
     number = serializers.CharField(max_length=20)
     balance = serializers.DecimalField(max_digits=14, decimal_places=2, allow_null=True)
     isLocked = serializers.BooleanField(default=True)
-    customer_id = serializers.IntegerField()
+    customerId = serializers.IntegerField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -22,11 +22,11 @@ class BankAccountSerialize(serializers.Serializer):
             'id': account.id,
             'number': account.number,
             'balance': account.balance,
-            'customer_id': account.customer_id,
+            'customerId': account.customer_id,
             'isLocked': account.is_locked
         }
 
-    def validate_customer_id(self, value):
+    def validate_customerId(self, value):
         try:
             self.customer_repository.get_customer_by_id(value)
             return value
@@ -43,9 +43,9 @@ class BankAccountSerialize(serializers.Serializer):
             number=validated_data.get('number'),
             balance=validated_data.get('balance'),
             is_locked=validated_data.get('isLocked'),
-            customer_id=validated_data.get('customer_id')
+            customer_id=validated_data.get('customerId')
         ).execute()
         return self.to_dict(account)
 
     def update(self, instance, validated_data):
-        super(BankAccountSerialize, self).update()
+        super().update()

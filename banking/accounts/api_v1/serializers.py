@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from banking.accounts.factories import create_bank_account_interactor, create_bank_account_repository
-from banking.common.models import EntityDoesNotExistException
+from banking.common.exceptions import EntityDoesNotExistException
 from banking.customers.factories import create_customer_repository
 
 

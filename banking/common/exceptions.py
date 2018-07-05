@@ -11,7 +11,9 @@ class Error(Exception):
 
 
 class Notification:
-    errors = []
+
+    def __init__(self):
+        self.errors = []
 
     def add_error(self, message, exception=None):
         self.errors.append(Error(message, exception))

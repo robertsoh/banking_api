@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from banking.common.models import Notification
+from banking.common.exceptions import Notification
 
 
 class TransferDomainService:

@@ -7,6 +7,5 @@ class ViewWrapper(APIView):
     view_creator_func = None
 
     def post(self, request, *args, **kwargs):
-        kwargs.update(request.data)
-        body, status = self.view_creator_func(request, **kwargs).post(**kwargs)
+        body, status = self.view_creator_func(request, **kwargs).post(request.data)
         return Response(body, status=status, content_type='application/json')

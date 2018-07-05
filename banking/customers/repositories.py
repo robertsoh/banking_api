@@ -1,4 +1,4 @@
-from banking.common.models import EntityDoesNotExistException
+from banking.common.exceptions import EntityDoesNotExistException
 from banking.customers.entities import Customer
 from banking.customers.models import ORMCustomer
 

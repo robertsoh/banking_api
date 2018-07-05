@@ -1,0 +1,8 @@
+---
+applications:
+- name: banking_api
+  memory: 128M
+  instances: 1
+  buildpack: python_buildpack
+  services:
+  - banking-pgsql

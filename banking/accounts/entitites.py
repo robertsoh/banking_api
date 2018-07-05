@@ -1,4 +1,4 @@
-from banking.common.models import Notification
+from banking.common.exceptions import Notification
 
 
 class BankAccount(object):

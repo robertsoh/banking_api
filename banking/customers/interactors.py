@@ -21,6 +21,19 @@ class CreateCustomerInteractor:
         return self.customer_repository.create(customer)
 
 
+class GetCustomerInteractor:
+
+    def __init__(self, customer_repository):
+        self.customer_repository = customer_repository
+
+    def set_params(self, id):
+        self.id = id
+        return self
+
+    def execute(self):
+        return self.customer_repository.get_customer_by_id(self.id)
+
+
 class GetAllCustomersInteractor:
 
     def __init__(self, customer_repository):
@@ -53,3 +66,17 @@ class UpdateCustomerInteractor:
             customer.document_number = self.document_number
         self.customer_validator.validate(customer)
         return self.customer_repository.update(customer)
+
+
+class DeleteCustomerInteractor:
+
+    def __init__(self, customer_repository):
+        self.customer_repository = customer_repository
+
+    def set_params(self, id):
+        self.id = id
+        return self
+
+    def execute(self):
+        customer = self.customer_repository.get_customer_by_id(id=self.id)
+        return self.customer_repository.delete(customer)

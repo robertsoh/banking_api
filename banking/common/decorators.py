@@ -9,5 +9,8 @@ def serialize_exceptions(func):
         except Error as e:
             body = ErrorValidationSerializer.serialize(e)
             status = 400
+        except Exception as e:
+            body = str(e)
+            status = 400
         return body, status
     return func_wrapper

@@ -5,6 +5,7 @@ class ORMCustomer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     document_number = models.CharField(max_length=15, unique=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'customer'

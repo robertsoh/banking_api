@@ -9,7 +9,7 @@ class CustomerRepository:
         return Customer(id=customer.id,
                         first_name=customer.first_name,
                         last_name=customer.last_name,
-                        document_number=customer.document_number)
+                        document_number=customer.document_number,)
 
     def create(self, customer):
         db_customer = ORMCustomer.objects.create(first_name=customer.first_name,
@@ -32,7 +32,7 @@ class CustomerRepository:
         return queryset.exists()
 
     def get_all_customers(self):
-        queryset = ORMCustomer.objects.all()
+        queryset = ORMCustomer.objects.filter(is_active=True)
         customers = []
         for customer in queryset:
             customers.append(self._decode_db_customer(customer))
@@ -45,3 +45,9 @@ class CustomerRepository:
         db_customer.document_number = customer.document_number
         db_customer.save()
         return self._decode_db_customer(db_customer)
+
+    def delete(self, customer):
+        db_customer = ORMCustomer.objects.get(id=customer.id)
+        db_customer.is_active = False
+        db_customer.save()
+        return True

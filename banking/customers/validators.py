@@ -8,11 +8,11 @@ class CustomerValidator:
 
     def validate(self, customer):
         notification = Notification()
-        self.validate_document_number(notification, customer.document_number)
+        self.validate_document_number(notification, customer.id, customer.document_number)
         if notification.has_errors():
             raise Error(notification.error_message())
 
-    def validate_document_number(self, notification, value):
-        if self.customer_repository.exists_document_number(value):
+    def validate_document_number(self, notification, customer_id, document_number):
+        if self.customer_repository.exists_document_number(customer_id, document_number):
             notification.add_error("Document number already exists")
             return

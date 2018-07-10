@@ -24,8 +24,12 @@ class CustomerRepository:
         except ORMCustomer.DoesNotExist:
             raise EntityDoesNotExistException()
 
-    def exists_document_number(self, document_number):
-        return ORMCustomer.objects.filter(document_number=document_number).exists()
+    def exists_document_number(self, customer_id, document_number):
+        if customer_id:
+            queryset = ORMCustomer.objects.filter(document_number=document_number).exclude(id=customer_id)
+        else:
+            queryset = ORMCustomer.objects.filter(document_number=document_number)
+        return queryset.exists()
 
     def get_all_customers(self):
         queryset = ORMCustomer.objects.all()
@@ -33,3 +37,11 @@ class CustomerRepository:
         for customer in queryset:
             customers.append(self._decode_db_customer(customer))
         return customers
+
+    def update(self, customer):
+        db_customer = ORMCustomer.objects.get(id=customer.id)
+        db_customer.first_name = customer.first_name
+        db_customer.last_name = customer.last_name
+        db_customer.document_number = customer.document_number
+        db_customer.save()
+        return self._decode_db_customer(db_customer)

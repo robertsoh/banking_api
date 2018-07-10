@@ -9,3 +9,13 @@ class ViewWrapper(APIView):
     def post(self, request, *args, **kwargs):
         body, status = self.view_creator_func(request, **kwargs).post(request.data)
         return Response(body, status=status, content_type='application/json')
+
+    def get(self, request, *args, **kwargs):
+        kwargs.update(request.GET.dict())
+        body, status = self.view_creator_func(request, **kwargs).get(**kwargs)
+        return Response(body, status=status, content_type='application/json')
+
+    def patch(self, request, *args, **kwargs):
+        kwargs.update(request.data)
+        body, status = self.view_creator_func(request, **kwargs).patch(kwargs)
+        return Response(body, status=status, content_type='application/json')

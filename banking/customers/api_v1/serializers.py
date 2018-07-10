@@ -10,7 +10,7 @@ class CustomerSerializer:
         }
 
 
-class MultipleCustomerSerializer:
+class CustomersSerializer:
 
     @staticmethod
     def serialize(customers):

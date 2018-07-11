@@ -1,5 +1,6 @@
 from banking.accounts.entitites import BankAccount
 from banking.accounts.models import ORMBankAccount
+from banking.common.exceptions import EntityDoesNotExistException
 
 
 class BankAccountRepository:
@@ -20,8 +21,11 @@ class BankAccountRepository:
         return ORMBankAccount.objects.filter(number=account_number).exists()
 
     def find_by_number(self, account_number):
-        db_account = ORMBankAccount.objects.get(number=account_number)
-        return self._decode_db_account(db_account)
+        try:
+            db_account = ORMBankAccount.objects.get(number=account_number)
+            return self._decode_db_account(db_account)
+        except ORMBankAccount.DoesNotExist:
+            raise EntityDoesNotExistException("Bank account does not exist")
 
     def update(self, account):
         db_account = ORMBankAccount.objects.get(id=account.id)

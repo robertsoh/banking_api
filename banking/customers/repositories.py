@@ -25,7 +25,7 @@ class CustomerRepository:
             db_customer = ORMCustomer.objects.get(id=id)
             return self._decode_db_customer(db_customer)
         except ORMCustomer.DoesNotExist:
-            raise EntityDoesNotExistException()
+            raise EntityDoesNotExistException("Customer does not exists")
 
     def exists_document_number(self, customer_id, document_number):
         if customer_id:

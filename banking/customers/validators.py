@@ -16,8 +16,3 @@ class CustomerValidator:
         if self.customer_repository.exists_document_number(customer_id, document_number):
             notification.add_error("Document number already exists")
             return
-
-# class PaginatorValidator:
-#
-#     def validate(self, page_size, page):
-#         if page_size

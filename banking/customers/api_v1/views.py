@@ -5,7 +5,8 @@ from banking.customers.api_v1.serializers import CustomerSerializer, CustomersSe
 
 class CustomerListCreateView:
 
-    def __init__(self, create_customer_interactor=None,
+    def __init__(self,
+                 create_customer_interactor=None,
                  get_all_customers_interactor=None):
         self.create_customer_interactor = create_customer_interactor
         self.get_all_customers_interactor = get_all_customers_interactor

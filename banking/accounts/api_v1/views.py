@@ -1,18 +1,19 @@
-from rest_framework import status
-from rest_framework.generics import CreateAPIView
-from rest_framework.response import Response
-
 from banking.accounts.api_v1.serializers import BankAccountSerialize
+from banking.common.decorators import serialize_exceptions
 
 
-class BankAccountView(CreateAPIView):
-    serializer_class = BankAccountSerialize
+class BankAccountListCreateView:
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        data = self.perform_create(serializer)
-        return Response(data, status=status.HTTP_201_CREATED)
+    def __init__(self, create_bank_account_interactor=None):
+        self.create_bank_account_interactor = create_bank_account_interactor
 
-    def perform_create(self, serializer):
-        return serializer.save()
+    @serialize_exceptions
+    def post(self, data):
+        customer = self.create_bank_account_interactor.set_params(
+            number=data.get('number'),
+            balance=data.get('balance'),
+            is_locked=data.get('isLocked'),
+            customer_id=data.get('customerId')).execute()
+        body = BankAccountSerialize.serialize(customer)
+        status = 201
+        return body, status

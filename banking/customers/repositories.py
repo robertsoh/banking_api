@@ -1,4 +1,7 @@
+from django.core.paginator import Paginator
+
 from banking.common.exceptions import EntityDoesNotExistException
+from banking.common.paginators import CustomPagination
 from banking.customers.entities import Customer
 from banking.customers.models import ORMCustomer
 
@@ -31,12 +34,24 @@ class CustomerRepository:
             queryset = ORMCustomer.objects.filter(document_number=document_number)
         return queryset.exists()
 
-    def get_all_customers(self):
-        queryset = ORMCustomer.objects.filter(is_active=True)
+    def get_all_customers(self, page_size, page):
+        queryset = ORMCustomer.objects.filter(is_active=True).order_by('last_name')
+        paginator = Paginator(queryset, page_size)
+        try:
+            queryset = paginator.page(page)
+        except Exception:
+            queryset = paginator.page(paginator.num_pages)
         customers = []
         for customer in queryset:
             customers.append(self._decode_db_customer(customer))
-        return customers
+        pagination_data = {
+            'count': paginator.count,
+            'page_range': list(paginator.page_range),
+            'num_pages': paginator.num_pages,
+            'per_page': paginator.per_page,
+            'page': page
+        }
+        return customers, pagination_data
 
     def update(self, customer):
         db_customer = ORMCustomer.objects.get(id=customer.id)

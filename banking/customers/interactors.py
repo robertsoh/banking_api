@@ -39,8 +39,13 @@ class GetAllCustomersInteractor:
     def __init__(self, customer_repository):
         self.customer_repository = customer_repository
 
+    def set_params(self, page_size, page):
+        self.page_size = page_size
+        self.page = page
+        return self
+
     def execute(self):
-        return self.customer_repository.get_all_customers()
+        return self.customer_repository.get_all_customers(page_size=self.page_size, page=self.page)
 
 
 class UpdateCustomerInteractor:

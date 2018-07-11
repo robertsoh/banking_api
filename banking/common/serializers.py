@@ -1,3 +1,4 @@
+from banking.common.constants import DEFAULT_PAGINATOR_PAGE_SIZE, DEFAULT_PAGINATOR_PAGE
 
 
 class ErrorValidationSerializer:

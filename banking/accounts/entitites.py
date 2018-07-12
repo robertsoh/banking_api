@@ -3,7 +3,7 @@ from banking.common.exceptions import Notification
 
 class BankAccount(object):
 
-    def __init__(self, number, balance, is_locked, customer_id, id=None):
+    def __init__(self, number, balance=None, is_locked=None, customer_id=None, id=None):
         self.number = number
         self.balance = balance
         self.is_locked = is_locked

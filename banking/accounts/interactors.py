@@ -19,3 +19,17 @@ class CreateBankAccountInteractor:
                                    customer_id=self.customer_id)
         bank_account = self.bank_account_validator.validate(bank_account)
         return self.bank_account_repository.create(bank_account)
+
+
+class GetAllBankAccountsInteractor:
+
+    def __init__(self, bank_account_repository):
+        self.bank_account_repository = bank_account_repository
+
+    def set_params(self, page_size, page):
+        self.page_size = page_size
+        self.page = page
+        return self
+
+    def execute(self):
+        return self.bank_account_repository.get_all_bank_accounts(page_size=self.page_size, page=self.page)

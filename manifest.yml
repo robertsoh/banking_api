@@ -1,7 +1,7 @@
 ---
 applications:
 - name: banking_api
-  memory: 128M
+  memory: 250M
   instances: 1
   buildpack: python_buildpack
   services:

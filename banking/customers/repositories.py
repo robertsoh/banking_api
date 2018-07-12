@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
 
+from banking.accounts.entitites import BankAccount
 from banking.common.exceptions import EntityDoesNotExistException
 from banking.common.paginators import CustomPagination
 from banking.customers.entities import Customer
@@ -12,7 +13,21 @@ class CustomerRepository:
         return Customer(id=customer.id,
                         first_name=customer.first_name,
                         last_name=customer.last_name,
-                        document_number=customer.document_number,)
+                        document_number=customer.document_number)
+
+    def _decode_bank_accounts(self, db_bank_accounts):
+        bank_accounts = []
+        for db_bank_account in db_bank_accounts.filter(is_locked=False):
+            bank_accounts.append(BankAccount(id=db_bank_account.id,
+                                             number=db_bank_account.number))
+        return bank_accounts
+
+    def _decode_db_customer_bank_accounts(self, customer):
+        return Customer(id=customer.id,
+                        first_name=customer.first_name,
+                        last_name=customer.last_name,
+                        document_number=customer.document_number,
+                        bank_accounts=self._decode_bank_accounts(customer.bank_accounts))
 
     def create(self, customer):
         db_customer = ORMCustomer.objects.create(first_name=customer.first_name,
@@ -23,7 +38,7 @@ class CustomerRepository:
     def get_customer_by_id(self, id):
         try:
             db_customer = ORMCustomer.objects.get(id=id)
-            return self._decode_db_customer(db_customer)
+            return self._decode_db_customer_bank_accounts(db_customer)
         except ORMCustomer.DoesNotExist:
             raise EntityDoesNotExistException("Customer does not exists")
 

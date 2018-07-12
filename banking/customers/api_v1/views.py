@@ -31,7 +31,8 @@ class CustomerListCreateView:
             page=cleaned_data.get('page')).execute()
         body = custom_pagination.set_params(queryset=CustomersSerializer.serialize(customers),
                                             count=pagination_data.get('count'),
-                                            page_range=pagination_data.get('page_range')).paginate_queryset()
+                                            page_range=pagination_data.get('page_range')
+                                            ).paginate_queryset()
         status = 200
         return body, status
 

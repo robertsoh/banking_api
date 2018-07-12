@@ -4,10 +4,21 @@ class BankAccountSerialize:
 
     @staticmethod
     def serialize(account):
-        return {
+        data = {
             'id': account.id,
-            'number': account.number,
-            'balance': account.balance,
-            'customerId': account.customer_id,
-            'isLocked': account.is_locked
+            'number': account.number
         }
+        if account.balance:
+            data['balance'] = account.balance
+        if account.customer_id:
+            data['customerId'] = account.customer_id
+        if account.is_locked:
+            data['isLocked'] = account.is_locked
+        return data
+
+
+class BankAccountsSerialize:
+
+    @staticmethod
+    def serialize(bank_accounts):
+        return [BankAccountSerialize.serialize(bank_account) for bank_account in bank_accounts]

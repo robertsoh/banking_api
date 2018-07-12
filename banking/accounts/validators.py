@@ -1,4 +1,4 @@
-from banking.common.exceptions import Notification, EntityDoesNotExistException, Error
+from banking.common.exceptions import Notification, Error
 
 
 class BankAccountValidator:
@@ -9,14 +9,49 @@ class BankAccountValidator:
 
     def validate(self, bank_account):
         notification = Notification()
-        self.validate_customer_id(notification, bank_account.customer_id)
-        self.validate_number(notification, bank_account.number)
+        self.validate_customer_id(notification, bank_account)
+        self.validate_number(notification, bank_account)
+        self.validate_balance(notification, bank_account)
+        self.validate_is_locked(notification, bank_account)
         if notification.has_errors():
             raise Error(notification.error_message())
+        return bank_account
 
-    def validate_customer_id(self, notificacion, value):
+    def validate_customer_id(self, notification, bank_account):
+        value = bank_account.customer_id
+        if not value:
+            raise Error('Customer id is required')
+        try:
+            value = int(value)
+        except (ValueError, TypeError):
+            raise Error('Customer id must be a integer number')
         self.customer_repository.get_customer_by_id(value)
+        bank_account.customer_id = value
 
-    def validate_number(self, notificacion, value):
+    def validate_number(self, notification, bank_account):
+        value = bank_account.number
+        if not value:
+            raise Error('Account number is required')
+        try:
+            value = int(value)
+        except (ValueError, TypeError):
+            raise Error('Account number must be a integer number')
         if self.bank_account_repository.exists_account_number(value):
             raise Error('Account number already exists')
+        bank_account.number = value
+
+    def validate_balance(self, notification, bank_account):
+        value = bank_account.balance
+        if not value:
+            raise Error('Balance is required')
+        try:
+            value = float(value)
+        except (ValueError, TypeError):
+            notification.add_error('Balance number must be a decimal number')
+        bank_account.balance = value
+
+    def validate_is_locked(self, notification, bank_account):
+        value = bank_account.is_locked
+        if value and type(value) != bool:
+            notification.add_error('Is locked must be a boolean value')
+        bank_account.is_locked = value or False

@@ -17,5 +17,5 @@ class CreateBankAccountInteractor:
     def execute(self):
         bank_account = BankAccount(number=self.number, balance=self.balance, is_locked=self.is_locked,
                                    customer_id=self.customer_id)
-        self.bank_account_validator.validate(bank_account)
+        bank_account = self.bank_account_validator.validate(bank_account)
         return self.bank_account_repository.create(bank_account)

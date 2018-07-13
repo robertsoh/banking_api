@@ -12,7 +12,8 @@ class BankAccountRepository:
                            number=account.number,
                            balance=account.balance,
                            is_locked=account.is_locked,
-                           customer_id=account.customer_id)
+                           customer_id=account.customer_id,
+                           type=account.type)
 
     def create(self, account):
         db_account = ORMBankAccount.objects.create(number=account.number, balance=account.balance,

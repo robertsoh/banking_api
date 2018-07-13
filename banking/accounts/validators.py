@@ -1,3 +1,4 @@
+from banking.common.constants import BANK_ACCOUNT_TYPE_CHOICES
 from banking.common.exceptions import Notification, Error
 
 
@@ -13,6 +14,7 @@ class BankAccountValidator:
         self.validate_number(notification, bank_account)
         self.validate_balance(notification, bank_account)
         self.validate_is_locked(notification, bank_account)
+        self.validate_type(notification, bank_account)
         if notification.has_errors():
             raise Error(notification.error_message())
         return bank_account
@@ -55,3 +57,8 @@ class BankAccountValidator:
         if value and type(value) != bool:
             notification.add_error('Is locked must be a boolean value')
         bank_account.is_locked = value or False
+
+    def validate_type(self, notification, bank_account):
+        value = bank_account.type
+        if value not in [type[0] for type in BANK_ACCOUNT_TYPE_CHOICES]:
+            notification.add_error('Type is not a valid choice')

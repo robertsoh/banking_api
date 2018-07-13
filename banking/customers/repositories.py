@@ -2,7 +2,6 @@ from django.core.paginator import Paginator
 
 from banking.accounts.entitites import BankAccount
 from banking.common.exceptions import EntityDoesNotExistException
-from banking.common.paginators import CustomPagination
 from banking.customers.entities import Customer
 from banking.customers.models import ORMCustomer
 
@@ -19,7 +18,9 @@ class CustomerRepository:
         bank_accounts = []
         for db_bank_account in db_bank_accounts.filter(is_locked=False):
             bank_accounts.append(BankAccount(id=db_bank_account.id,
-                                             number=db_bank_account.number))
+                                             number=db_bank_account.number,
+                                             balance=db_bank_account.balance,
+                                             type=db_bank_account.type))
         return bank_accounts
 
     def _decode_db_customer_bank_accounts(self, customer):

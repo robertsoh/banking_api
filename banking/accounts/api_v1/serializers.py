@@ -6,7 +6,8 @@ class BankAccountSerialize:
     def serialize(account):
         data = {
             'id': account.id,
-            'number': account.number
+            'number': account.number,
+            'type': account.get_type_display()
         }
         if account.balance:
             data['balance'] = account.balance

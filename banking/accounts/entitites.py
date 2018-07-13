@@ -1,14 +1,17 @@
+from banking.common.constants import BANK_ACCOUNT_TYPE_CHOICES
 from banking.common.exceptions import Notification
+from banking.common.utils import choices_to_dict
 
 
 class BankAccount(object):
 
-    def __init__(self, number, balance=None, is_locked=None, customer_id=None, id=None):
+    def __init__(self, number, balance=None, is_locked=None, customer_id=None, id=None, type=None):
         self.number = number
         self.balance = balance
         self.is_locked = is_locked
         self.customer_id = customer_id
         self.id = id
+        self.type = type
 
     def lock(self):
         if not self.is_locked:
@@ -67,3 +70,6 @@ class BankAccount(object):
 
     def can_be_withdrawed(self, amount):
         return not self.is_locked and self.balance >= amount
+
+    def get_type_display(self):
+        return choices_to_dict(BANK_ACCOUNT_TYPE_CHOICES)[self.type]

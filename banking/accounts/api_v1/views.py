@@ -17,7 +17,8 @@ class BankAccountListCreateView:
             number=data.get('number'),
             balance=data.get('balance'),
             is_locked=data.get('isLocked'),
-            customer_id=data.get('customerId')
+            customer_id=data.get('customerId'),
+            type=data.get('type')
             ).execute()
         body = BankAccountSerialize.serialize(customer)
         status = 201

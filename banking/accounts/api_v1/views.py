@@ -37,3 +37,30 @@ class BankAccountListCreateView:
                                             ).paginate_queryset()
         status = 200
         return body, status
+
+
+class BankAccountRetrieveUpdateView:
+
+    def __init__(self,
+                 get_bank_account_interactor=None,
+                 update_bank_account_interactor=None):
+        self.get_bank_account_interactor = get_bank_account_interactor
+        self.update_bank_account_interactor = update_bank_account_interactor
+
+    @serialize_exceptions
+    def get(self, account_id):
+        bank_account = self.get_bank_account_interactor.set_params(id=account_id).execute()
+        body = BankAccountSerialize.serialize(bank_account)
+        status = 200
+        return body, status
+
+    @serialize_exceptions
+    def patch(self, data):
+        bank_account = self.update_bank_account_interactor.set_params(
+            id=data.get('account_id'),
+            balance=data.get('balance'),
+            is_locked=data.get('isLocked')
+            ).execute()
+        body = BankAccountSerialize.serialize(bank_account)
+        status = 200
+        return body, status

@@ -61,7 +61,7 @@ class CustomerRetrieveUpdateDeleteView:
             first_name=data.get('firstName'),
             last_name=data.get('lastName'),
             document_number=data.get('documentNumber')
-        ).execute()
+            ).execute()
         body = CustomerSerializer.serialize(customer)
         status = 200
         return body, status

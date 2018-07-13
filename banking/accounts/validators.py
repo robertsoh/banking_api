@@ -36,7 +36,7 @@ class BankAccountValidator:
             value = int(value)
         except (ValueError, TypeError):
             raise Error('Account number must be a integer number')
-        if self.bank_account_repository.exists_account_number(value):
+        if self.bank_account_repository.exists_account_number(bank_account.id, value):
             raise Error('Account number already exists')
         bank_account.number = value
 

@@ -19,8 +19,12 @@ class BankAccountRepository:
                                                    is_locked=account.is_locked, customer_id=account.customer_id)
         return self._decode_db_account(db_account)
 
-    def exists_account_number(self, account_number):
-        return ORMBankAccount.objects.filter(number=account_number).exists()
+    def exists_account_number(self, bank_account_id, account_number):
+        if bank_account_id:
+            queryset = ORMBankAccount.objects.filter(number=account_number).exclude(id=bank_account_id)
+        else:
+            queryset = ORMBankAccount.objects.filter(number=account_number)
+        return queryset.exists()
 
     def find_by_number(self, account_number):
         try:
@@ -28,6 +32,13 @@ class BankAccountRepository:
             return self._decode_db_account(db_account)
         except ORMBankAccount.DoesNotExist:
             raise EntityDoesNotExistException('Bank account does not exist')
+
+    def get_bank_account_by_id(self, id):
+        try:
+            db_bank_account = ORMBankAccount.objects.get(id=id)
+            return self._decode_db_account(db_bank_account)
+        except ORMBankAccount.DoesNotExist:
+            raise EntityDoesNotExistException("Bank account does not exists")
 
     def get_all_bank_accounts(self, page_size, page):
         queryset = ORMBankAccount.objects.filter().order_by('number')
@@ -53,3 +64,4 @@ class BankAccountRepository:
         db_account.balance = account.balance
         db_account.is_locked = account.is_locked
         db_account.save()
+        return self._decode_db_account(db_account)

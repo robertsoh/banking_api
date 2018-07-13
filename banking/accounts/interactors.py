@@ -33,3 +33,38 @@ class GetAllBankAccountsInteractor:
 
     def execute(self):
         return self.bank_account_repository.get_all_bank_accounts(page_size=self.page_size, page=self.page)
+
+
+class GetBankAccountInteractor:
+
+    def __init__(self, bank_account_repository):
+        self.bank_account_repository = bank_account_repository
+
+    def set_params(self, id):
+        self.id = id
+        return self
+
+    def execute(self):
+        return self.bank_account_repository.get_bank_account_by_id(self.id)
+
+
+class UpdateBankAccountInteractor:
+
+    def __init__(self, bank_account_repository, bank_account_validator):
+        self.bank_account_repository = bank_account_repository
+        self.bank_account_validator = bank_account_validator
+
+    def set_params(self, id, balance, is_locked):
+        self.id = id
+        self.balance = balance
+        self.is_locked = is_locked
+        return self
+
+    def execute(self):
+        bank_account = self.bank_account_repository.get_bank_account_by_id(id=self.id)
+        if self.balance:
+            bank_account.balance = self.balance
+        if self.is_locked is not None:
+            bank_account.is_locked = self.is_locked
+        bank_account = self.bank_account_validator.validate(bank_account)
+        return self.bank_account_repository.update(bank_account)

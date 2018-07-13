@@ -1,3 +1,5 @@
+import re
+
 from banking.common.constants import BANK_ACCOUNT_TYPE_CHOICES
 from banking.common.exceptions import Notification, Error
 
@@ -35,9 +37,11 @@ class BankAccountValidator:
         if not value:
             raise Error('Account number is required')
         try:
-            value = int(value)
+            value = str(value)
         except (ValueError, TypeError):
-            raise Error('Account number must be a integer number')
+            raise Error('Account number is not valid')
+        if not re.match('([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})$', value):
+            raise Error('Account number is not valid')
         if self.bank_account_repository.exists_account_number(bank_account.id, value):
             raise Error('Account number already exists')
         bank_account.number = value

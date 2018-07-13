@@ -5,7 +5,7 @@ from banking.customers.models import ORMCustomer
 
 
 class ORMBankAccount(models.Model):
-    number = models.IntegerField(unique=True)
+    number = models.CharField(max_length=20, unique=True)
     balance = models.DecimalField(decimal_places=2, max_digits=14, blank=True, null=True)
     is_locked = models.BooleanField(default=False)
     customer = models.ForeignKey(ORMCustomer, related_name='bank_accounts')
@@ -19,4 +19,3 @@ class ORMBankAccount(models.Model):
 
     def __str__(self):
         return '{}: {}'.format(self.customer, self.number)
-

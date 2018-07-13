@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal
 
 from banking.common.exceptions import Notification, Error
@@ -32,17 +33,27 @@ class TransferValidator:
         if not value:
             raise Error('Origen account is required')
         try:
-            value = int(value)
+            value = str(value)
         except (ValueError, TypeError):
             raise Error('Origen account is not valid')
-        transaction.origen_account = self.bank_account_repository.find_by_number(value)
+        if not re.match('([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})$', value):
+            raise Error('Origen account number is not valid')
+        try:
+            transaction.origen_account = self.bank_account_repository.find_by_number(value)
+        except Exception as ex:
+            raise Error('Origen account: {}'.format(str(ex)))
 
     def validate_destination_account(self, notification, transaction):
         value = transaction.destination_account
         if not value:
             raise Error('Destination account is required')
         try:
-            value = int(value)
+            value = str(value)
         except (ValueError, TypeError):
-            raise Error('Destination account is not valid')
-        transaction.destination_account = self.bank_account_repository.find_by_number(value)
+            raise Error('Origen account is not valid')
+        if not re.match('([0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4})$', value):
+            raise Error('Destination account number is not valid')
+        try:
+            transaction.destination_account = self.bank_account_repository.find_by_number(value)
+        except Exception as ex:
+            raise Error('Destination account: {}'.format(str(ex)))

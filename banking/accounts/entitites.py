@@ -22,8 +22,7 @@ class BankAccount(object):
             self.is_locked = False
 
     def has_identity(self):
-        # True if self.number.strip() else False
-        return True
+        return True if self.number.strip() else False
 
     def withdraw_money(self, amount):
         notification = self.withdraw_validation(amount)

@@ -22,7 +22,8 @@ class BankAccount(object):
             self.is_locked = False
 
     def has_identity(self):
-        return True if self.number.strip() else False
+        # True if self.number.strip() else False
+        return True
 
     def withdraw_money(self, amount):
         notification = self.withdraw_validation(amount)
@@ -51,22 +52,22 @@ class BankAccount(object):
 
     def validate_amount(self, notification, amount):
         if not amount:
-            notification.add_error("amount is missing")
+            notification.add_error('amount is missing')
             return
         if amount <= 0:
-            notification.add_error("The amount must be greater than zero")
+            notification.add_error('The amount must be greater than zero')
 
     def validate_bank_account(self, notification):
         if not self.has_identity():
-            notification.add_error("The account has no identity")
+            notification.add_error('The account has no identity')
         if self.is_locked:
-            notification.add_error("The account is locked")
+            notification.add_error('The account is locked')
 
     def validate_balance(self, notification, amount):
         if self.balance is None:
-            notification.add_error("balance cannot be null")
+            notification.add_error('balance cannot be null')
         if not self.can_be_withdrawed(amount):
-            notification.add_error("Cannot withdraw in the account, amount is greater than balance")
+            notification.add_error('Cannot withdraw in the account, amount is greater than balance')
 
     def can_be_withdrawed(self, amount):
         return not self.is_locked and self.balance >= amount

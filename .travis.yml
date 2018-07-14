@@ -1,0 +1,23 @@
+language: python
+python:
+- 3.6.5
+services: postgresql
+before_install:
+- export SECRET_KEY=secret
+- export DJANGO_SETTINGS_MODULE=config.settings.test
+- export DB_NAME=travisdb
+script: python manage.py test
+branches:
+  only:
+  - master
+before_deploy:
+- find . -type f -perm 0444
+- export CF_TRACE=true
+deploy:
+  provider: cloudfoundry
+  username: robertson.ore@gmail.com
+  password:
+    secure: sH+5yUy3Bm3Yk7bJAerJggU+eMSX6sWq65dSvPqvL3Qm8N7ono8++nT3F7OwKnzwoGYoRZOL3tUKNuYk4s1DMVGN0e1NCFvHTNevQsnkYyOkdWkfBHppRM+4hFr4YMKC+OKzmUKuBUJu/+ikNCne7+Am9p8xL3cwsK8O1C/kZqZCjaJCwEhqkLkqB4iXvj18+sssdTItVVkFwOltmj3CxIp6LxF19cpX1A2kXMMLPAqP9sycSR3ulBohUDZj/K/JqC9q5tO0PSUcTYvWY7Yd3Qm50oY6TEjJn0Za+nZc7Verc5zbA6gHweMzSxz+OMC/beQTqGmKPZYoNP/SHERiwya3YzGLBBvVJhvXzoh1M574xzEsrPZZ+ve/Z/q2E4pAu/1GuYE8pLV3mjWf4nZef2KchH8t4/zpDCJzBaAA67m8cez7CPUlP09Z18VKoxr92ZCSlT3L5I/sRXjpQ0mfQDzp3F9vueKYXNn8WrpSZYbThjntR65dDjUyXBFwtUHfT5CN1zSpwEQEpAkO9KPA2wMjp7D+o9LLZVjWdjEHQXdPaskv4HAdfOLig01Qp0T0AxyYCXGI5SDEs9e6L3qehPcWmeAoBdqjtfL1pII2/sOQb+8v8QLW62VyBvnx91TBFGHDlOkOEqgpv5JpgGcCiFeBZ41qlaUR+Gs8CWsuMhY=
+  api: https://api.run.pivotal.io
+  organization: qoilabs
+  space: staging
